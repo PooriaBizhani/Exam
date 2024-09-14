@@ -1,0 +1,178 @@
+﻿@using First_Sample.Shared.ViewModels.Questions
+@model QuestionVM
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    Layout = "_Layout";
+}
+
+<!-- اضافه کردن لینک به فایل CSS بوت استرپ -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<h6 class="mb-4">زمان باقی مانده: <span id="timer" class="font-weight-bold"></span></h6>
+<div class="container mt-4">
+    <br />
+    <h2 class="mb-4">سوال: @Model.Questions</h2>
+
+    <form id="answerForm" class="form-group">
+        <div class="form-check">
+            <input class="form-check-input" type="radio" id="yes" name="answer" value="yes">
+            <label class="form-check-label" for="yes">
+                بله
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" id="no" name="answer" value="no">
+            <label class="form-check-label" for="no">
+                خیر
+            </label>
+        </div>
+        <input type="hidden" id="questionId" value="@Model.Id" />
+
+        <div class="mt-4">
+            <button type="button" id="backQuestion" class="btn btn-secondary">سوال قبلی</button>
+            <button type="button" id="nextQuestion" class="btn btn-primary ml-2">سوال بعدی</button>
+        </div>
+    </form>
+</div>
+
+<!-- اضافه کردن لینک به فایل JavaScript بوت استرپ و jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var timerDuration = 10 * 60 * 1000; // 10 minutes in milliseconds
+        var timerDisplay = $('#timer');
+
+        // Check if the exam is being restarted
+        var isRestarting = localStorage.getItem('isRestarting');
+
+        if (isRestarting) {
+            // Clear existing exam end time and the restart flag
+            localStorage.removeItem('examEndTime');
+            localStorage.removeItem('isRestarting');
+        }
+
+        // Get exam end time from localStorage or set a new one
+        var examEndTime = localStorage.getItem('examEndTime');
+        if (!examEndTime) {
+            // Set new exam end time if it doesn't exist
+            var currentTime = new Date().getTime();
+            examEndTime = currentTime + timerDuration;
+            localStorage.setItem('examEndTime', examEndTime);
+        } else {
+            examEndTime = parseInt(examEndTime);
+        }
+
+        // Function to update the timer display
+        function updateTimer() {
+            var currentTime = new Date().getTime();
+            var remainingTime = examEndTime - currentTime;
+
+            if (remainingTime <= 0) {
+                clearInterval(timerInterval);
+                // Remove the timer from localStorage after it ends
+                localStorage.removeItem('examEndTime');
+                alert('زمان به پایان رسید! به صفحه شروع هدایت می‌شوید.');
+                window.location.href = '@Url.Action("Start", "Exam")'; // Redirect to the start page
+                return;
+            }
+
+            var minutes = Math.floor(remainingTime / (1000 * 60));
+            var seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+
+            // Update timer display
+            timerDisplay.text(minutes + " دقیقه و " + seconds + " ثانیه");
+        }
+
+        // Update the timer every second
+        var timerInterval = setInterval(updateTimer, 1000);
+
+        // Event handler for the 'Next Question' button
+        $('#nextQuestion').click(function () {
+            var answer = $('input[name="answer"]:checked').val();
+            var questionId = $('#questionId').val();
+
+            if (answer === undefined) {
+                alert('لطفاً یک گزینه انتخاب کنید');
+                return;
+            }
+
+            var data = {
+                Choice: answer,
+                QuestionId: questionId
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "/Exam/SubmitAnswer",
+                contentType: "application/json",
+                data: JSON.stringify(data),
+                success: function () {
+                    var nextIndex = @ViewBag.Index + 1;
+                    var totalQuestions = @ViewBag.TotalQuestions;
+
+                    if (nextIndex < totalQuestions) {
+                        window.location.href = '@Url.Action("Questions")?index=' + nextIndex;
+                    } else {
+                        // اضافه کردن کد برای هدایت به صفحه نتایج پس از پاسخ به آخرین سوال
+                        window.location.href = '@Url.Action("Results", "Exam")';
+                    }
+                },
+                error: function () {
+                    console.log("Error in submitting the answer!");
+                }
+            });
+        });
+
+        // Event handler for the 'Back Question' button
+        $('#backQuestion').click(function () {
+            var answer = $('input[name="answer"]:checked').val();
+            var questionId = $('#questionId').val();
+
+            if (answer !== undefined) {
+                var data = {
+                    Choice: answer,
+                    QuestionId: questionId
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Exam/UpdateAnswer",
+                    contentType: "application/json",
+                    data: JSON.stringify(data),
+                    success: function () {
+                        var prevIndex = @ViewBag.Index - 1;
+
+                        if (prevIndex >= 1) {
+                            window.location.href = '@Url.Action("Questions")?index=' + prevIndex;
+                        } else {
+                            alert('شما در حال حاضر در اولین سوال هستید.');
+                        }
+                    },
+                    error: function () {
+                        console.log("Error in updating the answer!");
+                    }
+                });
+            } else {
+                var prevIndex = @ViewBag.Index - 1;
+
+                if (prevIndex >= 1) {
+                    window.location.href = '@Url.Action("Questions")?index=' + prevIndex;
+                } else {
+                    alert('شما در حال حاضر در اولین سوال هستید.');
+                }
+            }
+        });
+
+        // Set previously selected answer if available
+        var previousChoice = '@Model.PreviousChoice'; // Ensure PreviousChoice is set correctly
+        setSelectedAnswer(previousChoice);
+
+        // Function to set selected answer in the radio buttons
+        function setSelectedAnswer(choice) {
+            if (choice) {
+                $('input[name="answer"][value="' + choice + '"]').prop('checked', true);
+            }
+        }
+    });
+</script>

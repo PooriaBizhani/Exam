@@ -1,0 +1,12 @@
+﻿@using First_Sample.Shared.ViewModels.Questions
+@model List<QuestionVM>
+@{
+    Layout = "_Layout";
+}
+<h2>آزمون خود را شروع کنید</h2>
+
+
+<form method="post" action="@Url.Action("ButtonClick", "Exam")">
+    <input type="hidden" name="index" value="0" /> <!-- شروع از سوال اول -->
+    <button type="submit">شروع آزمون</button>
+</form>

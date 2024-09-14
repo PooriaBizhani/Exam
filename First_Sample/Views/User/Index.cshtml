@@ -1,0 +1,41 @@
+﻿@using First_Sample.Shared.ViewModels.Users
+@model IEnumerable<UserVM>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "_Layout";
+}
+
+<h2>لیست کاربران</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>عکس</th>
+            <th>نام</th>
+            <th>نام خانوادگی</th>
+            <th>کد ملی</th>
+            <th>شماره تلفن</th>
+            <th>استان</th>
+            <th>شهر</th>
+            <th>آدرس</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>
+                    <img src="@Url.Content("~/uploads/" + user.Photo)" alt="عکس @user.Name" style="width: 100px; height: 100px;" />
+                </td>
+                <td>@user.Name</td>
+                <td>@user.Family</td>
+                <td>@user.NationalCode</td>
+                <td>@user.PhoneNumber</td>
+                <td>@user.ProvinceName</td>
+                <td>@user.CityName</td>
+                <td>@user.Address</td>
+            </tr>
+        }
+    </tbody>
+</table>

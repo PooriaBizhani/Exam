@@ -1,0 +1,12 @@
+D:\Sample\First_Sample\FirstSample-master\First_Sample.Shared\bin\Debug\net8.0\First_Sample.Shared.deps.json
+D:\Sample\First_Sample\FirstSample-master\First_Sample.Shared\bin\Debug\net8.0\First_Sample.Shared.dll
+D:\Sample\First_Sample\FirstSample-master\First_Sample.Shared\bin\Debug\net8.0\First_Sample.Shared.pdb
+D:\Sample\First_Sample\FirstSample-master\First_Sample.Shared\obj\Debug\net8.0\First_Sample.Shared.csproj.AssemblyReference.cache
+D:\Sample\First_Sample\FirstSample-master\First_Sample.Shared\obj\Debug\net8.0\First_Sample.Shared.GeneratedMSBuildEditorConfig.editorconfig
+D:\Sample\First_Sample\FirstSample-master\First_Sample.Shared\obj\Debug\net8.0\First_Sample.Shared.AssemblyInfoInputs.cache
+D:\Sample\First_Sample\FirstSample-master\First_Sample.Shared\obj\Debug\net8.0\First_Sample.Shared.AssemblyInfo.cs
+D:\Sample\First_Sample\FirstSample-master\First_Sample.Shared\obj\Debug\net8.0\First_Sample.Shared.csproj.CoreCompileInputs.cache
+D:\Sample\First_Sample\FirstSample-master\First_Sample.Shared\obj\Debug\net8.0\First_Sample.Shared.dll
+D:\Sample\First_Sample\FirstSample-master\First_Sample.Shared\obj\Debug\net8.0\refint\First_Sample.Shared.dll
+D:\Sample\First_Sample\FirstSample-master\First_Sample.Shared\obj\Debug\net8.0\First_Sample.Shared.pdb
+D:\Sample\First_Sample\FirstSample-master\First_Sample.Shared\obj\Debug\net8.0\ref\First_Sample.Shared.dll

@@ -1,0 +1,100 @@
+﻿@using First_Sample.Shared.ViewModels.RegisterUser
+@model RegisterUserVM
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    Layout = "_Layout";
+}
+@if (TempData["Warning"] != null)
+{
+    <div class="alert alert-warning">
+        @TempData["Warning"]
+    </div>
+}
+<h2>Register</h2>
+
+<form method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Family"></label>
+        <input asp-for="Family" class="form-control" />
+        <span asp-validation-for="Family" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="NationalCode"></label>
+        <input asp-for="NationalCode" class="form-control" />
+        <span asp-validation-for="NationalCode" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="PhoneNumber"></label>
+        <input asp-for="PhoneNumber" class="form-control" />
+        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Address"></label>
+        <textarea asp-for="Address" class="form-control"></textarea>
+        <span asp-validation-for="Address" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ProvinceId"></label>
+        <select asp-for="ProvinceId" asp-items="ViewBag.Provinces" class="form-control" onchange="loadCities(this.value)">
+            <option value="">انتخاب استان</option>
+        </select>
+        <span asp-validation-for="ProvinceId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CityId"></label>
+        <select asp-for="CityId" asp-items="ViewBag.Cities" class="form-control" id="city">
+            <option value="">انتخاب شهر</option>
+        </select>
+        <span asp-validation-for="CityId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Photo"></label>
+        <input asp-for="Photo" type="file" class="form-control" />
+        <span asp-validation-for="Photo" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Register</button>
+</form>
+
+@section Scripts {
+    <script>
+        async function loadCities(provinceId) {
+            if (!provinceId) {
+                document.getElementById('city').innerHTML = '<option value="">انتخاب شهر</option>';
+                return;
+            }
+
+            try {
+                const response = await fetch(`/User/GetCities?provinceId=${provinceId}`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const cities = await response.json();
+
+                const citySelect = document.getElementById('city');
+                citySelect.innerHTML = '<option value="">انتخاب شهر</option>';
+                cities.forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city.value;
+                    option.text = city.text;
+                    citySelect.add(option);
+                });
+            } catch (error) {
+                console.error('Error fetching cities:', error);
+            }
+        }
+    </script>
+}
