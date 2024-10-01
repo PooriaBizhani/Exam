@@ -1,13 +1,15 @@
 ﻿using AutoMapper;
 using First_Sample.Application.Dtos.User;
 using First_Sample.Application.Services;
-using First_Sample.Shared.ViewModels.RegisterUser;
-using First_Sample.Shared.ViewModels.Users;
+using First_Sample.Domain.ViewModels.RegisterUser;
+using First_Sample.Domain.ViewModels.Users;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace First_Sample.Presentation.Controllers
 {
+    [Authorize(Policy = "DynamicRole")]
     public class UserController : Controller
     {
         private readonly UserService _userService;

@@ -1,9 +1,8 @@
 ﻿using First_Sample.Application.Services;
-using First_Sample.Domain.Entities;
+using First_Sample.Domain.ViewModels.Answers;
+using First_Sample.Domain.ViewModels.Questions;
 using First_Sample.Shared.Dtos.Answer;
-using First_Sample.Shared.ViewModels.Answers;
-using First_Sample.Shared.ViewModels.Questions;
-using First_Sample.Shared.ViewModels.Users;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace First_Sample.Presentation.Controllers
@@ -18,7 +17,7 @@ namespace First_Sample.Presentation.Controllers
             _questionService = questionService;
             _answerService = answerService;
         }
-
+        [AllowAnonymous]
         public async Task<IActionResult> Start()
         {
             return View();
@@ -69,7 +68,7 @@ namespace First_Sample.Presentation.Controllers
             return View(model);
         }
 
-
+            
 
         [HttpGet("/GetQuestion/{id}")]
         public async Task<IActionResult> GetQuestion(int id)

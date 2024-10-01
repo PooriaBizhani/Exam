@@ -2,7 +2,7 @@
 using First_Sample.Domain.InterFaces;
 using First_Sample.Persistence.Repositories;
 using First_Sample.Shared.Dtos.Answer;
-using First_Sample.Shared.ViewModels.Answers;
+using First_Sample.Domain.ViewModels.Answers;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

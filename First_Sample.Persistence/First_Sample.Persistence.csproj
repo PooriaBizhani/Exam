@@ -6,6 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.8" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.8" />
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.5" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.8">
@@ -16,5 +18,10 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\First_Sample.Domain\First_Sample.Domain.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Reference Include="First_Sample.Presentation">
+	    <HintPath>..\First_Sample\bin\Debug\net8.0\First_Sample.Presentation.dll</HintPath>
+	  </Reference>
 	</ItemGroup>
 </Project>

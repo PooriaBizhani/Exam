@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -11,7 +12,7 @@ namespace First_Sample.Pages
         {
             _logger = logger;
         }
-
+        [AllowAnonymous]
         public void OnGet()
         {
 

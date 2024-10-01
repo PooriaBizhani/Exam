@@ -1,15 +1,17 @@
 ﻿using First_Sample.Domain.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace First_Sample.Persistence.Context
 {
-    public class First_Sample_Context : DbContext
+    public class First_Sample_Context : IdentityDbContext
     {
         public First_Sample_Context(DbContextOptions<First_Sample_Context> options)
             : base(options)
         {
 
         }
+        public DbSet<SiteSetting> SiteSettings { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Province> Provinces { get; set; }
         public DbSet<City> Cities { get; set; }
@@ -19,6 +21,7 @@ namespace First_Sample.Persistence.Context
         {
             modelBuilder
                 .ApplyConfigurationsFromAssembly(typeof(First_Sample_Context).Assembly);
+            base.OnModelCreating(modelBuilder);
         }
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
         {
